@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-indian-saffron text-white px-6 py-3 rounded-xl font-bold shadow-premium hover:scale-105 transition-transform active:scale-95;
+  }
+
+  .btn-success {
+    @apply bg-indian-green text-white px-6 py-3 rounded-xl font-bold shadow-premium hover:scale-105 transition-transform active:scale-95;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 rounded-3xl p-6 shadow-premium;
+  }
+
+  .giant-icon-btn {
+    @apply flex flex-col items-center justify-center w-full aspect-square bg-white rounded-3xl shadow-premium border-4 border-transparent hover:border-indian-saffron transition-all active:scale-95;
+  }
+}
