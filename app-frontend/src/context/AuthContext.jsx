@@ -2,8 +2,16 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
+function parseJwtExpiry(token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp ? payload.exp * 1000 : null; // convert to ms
+    } catch {
+        return null;
+    }
+}
+
 export const AuthProvider = ({ children }) => {
-    // Restore user from localStorage on mount
     const [user, setUser] = useState(() => {
         const saved = localStorage.getItem('user_data');
         return saved ? JSON.parse(saved) : null;
@@ -11,6 +19,16 @@ export const AuthProvider = ({ children }) => {
     const [role, setRole] = useState(localStorage.getItem('user_role') || null);
     const [token, setToken] = useState(localStorage.getItem('access_token') || null);
     const [coords, setCoords] = useState(null);
+
+    // On mount, check if stored token is already expired and auto-logout
+    useEffect(() => {
+        if (token) {
+            const expiry = parseJwtExpiry(token);
+            if (expiry && Date.now() > expiry) {
+                logout();
+            }
+        }
+    }, []);
 
     const login = (userData, userToken) => {
         setUser(userData);
