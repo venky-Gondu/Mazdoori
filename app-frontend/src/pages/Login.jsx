@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Phone, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleSendOTP = async (e) => {
         e.preventDefault();
@@ -22,12 +24,15 @@ const Login = () => {
 
         try {
             const res = await api.checkPhone(phone);
-            if (res.message === "OTP sent for verification" || res.message === "Existing user login") {
-                navigate('/otp', { state: { phone } });
-            } else if (res.access_token) {
-                // Direct login if possible
-                localStorage.setItem('access_token', res.access_token);
+            if (res.access_token && res.user) {
+                // Existing user — login directly and go to dashboard
+                login(res.user, res.access_token);
                 navigate('/dashboard');
+            } else if (res.message === "OTP sent for verification") {
+                // New user — go to OTP verification page
+                navigate('/otp', { state: { phone } });
+            } else {
+                setError(res.detail || 'Something went wrong.');
             }
         } catch (e) {
             setError('Network error. Check your connection.');

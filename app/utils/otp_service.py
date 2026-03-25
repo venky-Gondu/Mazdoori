@@ -25,7 +25,7 @@ def sendotp(phonenumber: str) -> str:
     OTP_STORE[phonenumber] = (otp, expire)
 
     if not TEXTBEE_API_KEY or not TEXTBEE_DEVICE_ID:
-        print("❌ TextBee credentials missing in .env")
+        print("TextBee credentials missing in .env")
         return "failed"
 
 
@@ -44,26 +44,26 @@ def sendotp(phonenumber: str) -> str:
     }
 
     try:
-        print(f"📡 Sending OTP to {formatted_phone} via TextBee...")
+        print(f"Sending OTP to {formatted_phone} via TextBee...")
         response = requests.post(url, json=payload, headers=headers)
         
         # TextBee returns 201 Created for successfully queued messages
         if response.status_code not in [200, 201]:
-            print(f"❌ TextBee Error {response.status_code}: {response.text}")
+            print(f"TextBee Error {response.status_code}: {response.text}")
             return "failed"
         
         response_data = response.json()
         # Check success in payload as well
         if response_data.get("data", {}).get("success") or response_data.get("success"):
-            print(f"✅ TextBee Response: {response_data}")
-            print(f"✅ OTP sent via TextBee to {formatted_phone}")
+            print(f"TextBee Response: {response_data}")
+            print(f"OTP sent via TextBee to {formatted_phone}")
             return "success"
         else:
-            print(f"⚠️ TextBee Queue Failure: {response_data}")
+            print(f"TextBee Queue Failure: {response_data}")
             return "failed"
             
     except Exception as e:
-        print(f"❌ Failed to send OTP via TextBee: {e}")
+        print(f"Failed to send OTP via TextBee: {e}")
         return "failed"
 
 def verify(phone: str, otp: str) -> str:

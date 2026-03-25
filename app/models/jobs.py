@@ -7,11 +7,12 @@ class Job(Base):
     __tablename__ = "jobs"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    farmer_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)  # ✅ FIXED
+    farmer_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     work_types = Column(ARRAY(String), nullable=False)
     location = Column(String, nullable=False)
     required_workers = Column(Integer, nullable=False)
     start_date = Column(Date, nullable=False)
     duration_days = Column(Integer, nullable=False)
+    wage_per_day = Column(Float, nullable=True)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)

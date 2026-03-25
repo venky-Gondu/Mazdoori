@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000'; // Replace with your production URL
+const BASE_URL = `http://${window.location.hostname}:8000`;
 
 const getHeaders = () => {
     const token = localStorage.getItem('access_token');
@@ -39,6 +39,9 @@ export const api = {
             method: 'POST',
             headers: getHeaders()
         });
+        if (res.status === 409) {
+            return { alreadyApplied: true, message: "Already applied" };
+        }
         return res.json();
     },
 
@@ -49,9 +52,32 @@ export const api = {
         return res.json();
     },
 
-    updateJobStatus: async (appId, status) => {
+    createJob: async (jobData) => {
+        const res = await fetch(`${BASE_URL}/Jobs/CreateJob`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(jobData)
+        });
+        return res.json();
+    },
+
+    getJobApplicants: async (jobId) => {
+        const res = await fetch(`${BASE_URL}/Jobs/Applicants/${jobId}`, {
+            headers: getHeaders()
+        });
+        return res.json();
+    },
+
+    updateApplicationStatus: async (appId, status) => {
         const res = await fetch(`${BASE_URL}/Jobs/UpdateJobApplicationStatus/${appId}?status=${status}`, {
             method: 'PUT',
+            headers: getHeaders()
+        });
+        return res.json();
+    },
+
+    getMyApplications: async (workerId) => {
+        const res = await fetch(`${BASE_URL}/Jobs/MyApplications/${workerId}`, {
             headers: getHeaders()
         });
         return res.json();

@@ -15,10 +15,10 @@ Base = declarative_base()
 def get_db():
     try:
         db = SessionLocal()
-        print("✅ DB session created")
+        print("DB session created")
         yield db
     except Exception as e:
-        print(f"❌ Error during DB session context: {e}")
+        print(f"Error during DB session context: {e}")
         raise e
     finally:
         db.close()

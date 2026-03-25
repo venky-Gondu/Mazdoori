@@ -20,12 +20,12 @@ def check_phone(req: PhoneRequest, db: Session = Depends(get_db)):
     - If exists: Return login token with redirect info
     - If new: Send OTP for registration
     """
-    print(f"🔍 Checking phone: {req.phone}")
+    print(f"Checking phone: {req.phone}")
     user = db.query(User).filter(User.phone == req.phone).first()
     
     if user:
         # Existing user - return login token with redirect info
-        print(f"✅ Existing user found for {req.phone} (Role: {user.role.value})")
+        print(f"Existing user found for {req.phone} (Role: {user.role.value})")
         token = create_access_token({"sub": str(user.id), "role": user.role.value})
         return {
             "message": "Existing user login",
@@ -35,9 +35,9 @@ def check_phone(req: PhoneRequest, db: Session = Depends(get_db)):
         }
     
     # New user - send OTP
-    print(f"📱 New user detected for {req.phone}, sending OTP...")
+    print(f"New user detected for {req.phone}, sending OTP...")
     result = sendotp(req.phone)
-    print(f"📬 OTP send result: {result}")
+    print(f"OTP send result: {result}")
     
     if result == "success":
         return {"message": "OTP sent for verification", "phone": req.phone}
@@ -53,20 +53,20 @@ def verify_register(req: OTPRegisterRequest, db: Session = Depends(get_db)):
     - Requires latitude and longitude (captured automatically by frontend)
     - Returns token with redirect info
     """
-    print(f"🔐 Verifying OTP for {req.phone}...")
+    print(f"Verifying OTP for {req.phone}...")
     
     # Step 1: Verify OTP FIRST (before creating user)
     otp_status = verify(req.phone, req.otp)
     if otp_status != "otp valid":
-        print(f"❌ OTP verification failed: {otp_status}")
+        print(f"OTP verification failed: {otp_status}")
         raise HTTPException(status_code=400, detail=otp_status)
     
-    print(f"✅ OTP verified successfully for {req.phone}")
+    print(f"OTP verified successfully for {req.phone}")
     
     # Step 2: Check if user already exists (edge case)
     existing_user = db.query(User).filter(User.phone == req.phone).first()
     if existing_user:
-        print(f"⚠️ User already exists for {req.phone}, returning existing user")
+        print(f"User already exists for {req.phone}, returning existing user")
         token = create_access_token({"sub": str(existing_user.id), "role": existing_user.role.value})
         return {
             "message": "User already exists",
@@ -76,7 +76,7 @@ def verify_register(req: OTPRegisterRequest, db: Session = Depends(get_db)):
         }
     
     # Step 3: Create new user with required location
-    print(f"👤 Creating new user: {req.phone} (Role: {req.role.value}, Location: {req.latitude}, {req.longitude})")
+    print(f"Creating new user: {req.phone} (Role: {req.role.value}, Location: {req.latitude}, {req.longitude})")
     new_user = User(
         phone=req.phone, 
         role=req.role, 
@@ -87,7 +87,7 @@ def verify_register(req: OTPRegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     
-    print(f"✅ User created successfully: {new_user.id}")
+    print(f"User created successfully: {new_user.id}")
     
     # Step 4: Generate token and return with redirect info
     token = create_access_token({"sub": str(new_user.id), "role": new_user.role.value})

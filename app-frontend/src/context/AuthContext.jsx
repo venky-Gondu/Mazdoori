@@ -3,16 +3,14 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    // Restore user from localStorage on mount
+    const [user, setUser] = useState(() => {
+        const saved = localStorage.getItem('user_data');
+        return saved ? JSON.parse(saved) : null;
+    });
     const [role, setRole] = useState(localStorage.getItem('user_role') || null);
     const [token, setToken] = useState(localStorage.getItem('access_token') || null);
     const [coords, setCoords] = useState(null);
-
-    useEffect(() => {
-        if (token) {
-            // Logic to verify token or load user if needed
-        }
-    }, [token]);
 
     const login = (userData, userToken) => {
         setUser(userData);
@@ -20,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         setRole(userData.role);
         localStorage.setItem('access_token', userToken);
         localStorage.setItem('user_role', userData.role);
+        localStorage.setItem('user_data', JSON.stringify(userData));
     };
 
     const logout = () => {
@@ -28,6 +27,7 @@ export const AuthProvider = ({ children }) => {
         setRole(null);
         localStorage.removeItem('access_token');
         localStorage.removeItem('user_role');
+        localStorage.removeItem('user_data');
     };
 
     const saveLocation = (lat, lng) => {
