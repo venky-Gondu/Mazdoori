@@ -21,7 +21,20 @@ Mazdoori solves this by acting as a hyperlocal matchmaking engine tailored stric
 
 ---
 
-## 3. Application Interfaces & User Interactions
+## 3. Key Features & Core Focus
+
+### What Mazdoori Focuses On
+Mazdoori hyper-focuses on the exact needs of the rural Indian agricultural labor market. It discards complex corporate job-portal concepts in favor of immediate, localized matchmaking. It ensures that a farmer needing laborers for tomorrow's harvest can find them within hours, and laborers waking up without work can instantly see open farms within walking distance.
+
+### Distinct Design Choices
+* **Visual Over Textual UX**: Given varying literacy rates, the entire application relies heavily on large icons, distinct colors, and option-based buttons. Keyboard typing is virtually eliminated beyond the initial login.
+* **Geofencing as a Feature**: The platform forces a strict 5-kilometer maximum radius for job visibility using backend Haversine calculations. This guarantees that travel time and transport costs never become a barrier for daily-wage workers.
+* **Strict Application State Machine**: To prevent chaos, the application state is strictly managed (Pending, Accepted, Rejected). Workers cannot be double-booked due to robust backend availability validation that checks date overlaps.
+* **Progressive Web App Architecture**: Mazdoori avoids forcing users with low-end devices to download heavy APKs from app stores. Instead, it runs lightning-fast directly from any mobile browser while looking and feeling like a native application.
+
+---
+
+## 4. Application Interfaces & User Interactions
 
 The application layout is highly optimized for progressive web app (PWA) mobile usage.
 
@@ -43,7 +56,7 @@ Workers view a localized feed of jobs strictly within their 5KM radius. The dash
 
 ---
 
-## 4. System Architecture & Database Design
+## 5. System Architecture & Database Design
 
 The system employs a decoupled, API-driven Client-Server architecture.
 * **Frontend**: React.js structured with Vite, utilizing TailwindCSS.
@@ -63,7 +76,7 @@ The relational database strictly enforces data integrity across users, jobs, and
 
 ---
 
-## 5. Functional Process Flow
+## 6. Functional Process Flow
 
 ### Role: Farmer
 1. **Creation**: The farmer initiates a job request via the Quick Action panel.
@@ -78,7 +91,7 @@ The relational database strictly enforces data integrity across users, jobs, and
 
 ---
 
-## 6. Comprehensive API Reference
+## 7. Comprehensive API Reference
 
 | Scope | Endpoint | HTTP | Description |
 |---|---|---|---|
@@ -94,7 +107,7 @@ The relational database strictly enforces data integrity across users, jobs, and
 
 ---
 
-## 7. Quick Start & Deployment Guide
+## 8. Quick Start & Deployment Guide
 
 ### Prerequisites
 * Python 3.9+
@@ -148,7 +161,7 @@ Generate a `.env` file in the project root containing critical runtime variables
 
 ---
 
-## 8. Development Roadmap
+## 9. Development Roadmap
 * **Offline Service Workers**: Caching the latest job feeds to allow workers functionality in extremely low-connectivity rural zones.
 * **Reputation Matrices**: Post-job bidirectional rating systems to foster trust and reliability.
 * **Regional Localization**: Expanding beyond Hindi/English into regional agricultural dialects natively.

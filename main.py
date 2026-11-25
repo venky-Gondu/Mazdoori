@@ -10,7 +10,8 @@ from app.models.job_applications import JobApplication
 from app.models.worker_availability import WorkerAvailability
 
 
-app=FastAPI()
+app=FastAPI(title="Mazdoori API",description="API for Mazdoori Platform",version="1.0.0"
+)
 
 app.add_middleware(
     CORSMiddleware,
